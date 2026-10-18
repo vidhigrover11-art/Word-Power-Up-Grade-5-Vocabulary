@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Word Power-Up</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F4F2FF;--card:#fff;--ink:#23245F;--soft:#5b5d8f;--line:#d9d6f5;--hi:#FFD93D;--mint:#2FCB8A;--mintbg:#DDF8EC;--pink:#FF5C86;--pinkbg:#FFE3EA;--sky:#3AAFE0;--skybg:#DFF3FC;--ink2:#4B4DC4;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#15163a;--card:#222459;--ink:#f1f0ff;--soft:#b3b5ea;--line:#3a3d85;--hi:#FFD93D;--mintbg:#173d36;--pinkbg:#4a2040;--skybg:#173a55;--ink2:#9aa0ff}}
+:root[data-theme="dark"]{--bg:#15163a;--card:#222459;--ink:#f1f0ff;--soft:#b3b5ea;--line:#3a3d85;--mintbg:#173d36;--pinkbg:#4a2040;--skybg:#173a55;--ink2:#9aa0ff}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Nunito,"Trebuchet MS",sans-serif;font-weight:700;font-size:17px;line-height:1.5}
+h1,h2,h3{font-family:"Baloo 2","Trebuchet MS",sans-serif;margin:0;line-height:1.15}
+.wrap{max-width:860px;margin:0 auto;padding:12px 14px 40px}
+header{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:space-between;padding:6px 0 10px}
+h1{font-size:30px;font-weight:800}
+.mark{background:linear-gradient(transparent 55%,var(--hi) 55%);padding:0 4px}
+.stat{display:flex;gap:10px;align-items:center;font-size:15px}
+.xp{width:120px;height:12px;background:var(--line);border-radius:9px;overflow:hidden}.xp i{display:block;height:100%;background:var(--mint);width:0;transition:width .5s}
+.pill{background:var(--card);border:2px solid var(--line);border-radius:20px;padding:2px 12px}
+nav{display:flex;gap:8px;overflow-x:auto;padding:4px 0 12px}
+nav button{flex:1;min-width:92px;font:inherit;font-weight:800;border:3px solid var(--ink);background:var(--card);color:var(--ink);border-radius:14px;padding:8px 6px;cursor:pointer;box-shadow:0 4px 0 var(--ink)}
+nav button[aria-selected=true]{background:var(--hi);color:#23245F}
+button:focus-visible,textarea:focus-visible{outline:4px solid var(--sky);outline-offset:2px}
+.sec{display:none}.sec.on{display:block}
+.card{background:var(--card);border:3px solid var(--ink);border-radius:18px;padding:16px;margin-bottom:14px}
+.sub{color:var(--soft);font-size:15px;margin:2px 0 10px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.chip{font:inherit;font-weight:800;border:2px solid var(--ink);background:var(--card);color:var(--ink);border-radius:20px;padding:5px 14px;cursor:pointer}
+.chip.sel{background:var(--ink2);color:#fff;border-color:var(--ink2)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.bw{font:inherit;font-weight:800;font-size:19px;border:3px solid var(--ink);background:var(--card);color:var(--ink);border-radius:16px;padding:12px 8px;cursor:pointer;text-align:center}
+.bw small{display:block;color:var(--soft);font-size:13px}.bw.seen{background:var(--mintbg)}
+.old{text-decoration:line-through;text-decoration-color:var(--pink);text-decoration-thickness:3px;color:var(--soft)}
+.new{background:linear-gradient(transparent 50%,var(--hi) 50%);color:var(--ink);padding:0 3px;animation:hl .6s ease-out both}
+@keyframes hl{from{background-size:0 100%}to{background-size:100% 100%}}
+.bg-box{background-repeat:no-repeat}
+.row{border-radius:14px;padding:12px 14px;margin:8px 0}
+.bad{background:var(--pinkbg)}.good{background:var(--mintbg)}.info{background:var(--skybg)}
+.lab{font-family:"Baloo 2",sans-serif;font-size:15px;font-weight:800}
+.say{font:inherit;border:2px solid var(--ink);background:var(--card);color:var(--ink);border-radius:50%;width:34px;height:34px;cursor:pointer;flex:none}
+.flex{display:flex;gap:8px;align-items:center;justify-content:space-between}
+.flip{perspective:900px;height:250px;margin-bottom:0}
+.flip button{all:unset;display:block;width:100%;height:100%;cursor:pointer;position:relative;transform-style:preserve-3d;transition:transform .5s}
+.flip button:focus-visible{outline:4px solid var(--sky);border-radius:18px}
+.flip.f button{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;border:3px solid var(--ink);border-radius:18px;padding:14px;backface-visibility:hidden;overflow:auto;background:var(--card)}
+.face.front{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:var(--skybg)}
+.face.front b{font-family:"Baloo 2",sans-serif;font-size:24px;line-height:1.2}
+.face.back{transform:rotateY(180deg);font-size:15px}
+.igrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+textarea{width:100%;min-height:90px;font:inherit;font-weight:700;border:3px solid var(--ink);border-radius:14px;padding:10px;background:var(--card);color:var(--ink)}
+.go{font:inherit;font-weight:800;font-size:18px;border:3px solid var(--ink);background:var(--mint);color:#0d2b20;border-radius:14px;padding:9px 18px;cursor:pointer;box-shadow:0 4px 0 var(--ink);margin:8px 8px 0 0}
+.go.alt{background:var(--hi);color:#23245F}
+.tok{font:inherit;font-weight:800;border:0;border-bottom:4px dashed var(--pink);background:var(--pinkbg);color:var(--ink);border-radius:6px;padding:0 3px;cursor:pointer;font-size:inherit}
+#out{font-size:21px;line-height:1.9}
+.opt{display:block;width:100%;text-align:left;font:inherit;font-weight:800;border:3px solid var(--ink);background:var(--card);color:var(--ink);border-radius:14px;padding:11px 14px;margin:8px 0;cursor:pointer}
+.opt.ok{background:var(--mint);color:#0d2b20}.opt.no{background:var(--pink);color:#fff}
+.big{font-size:22px;line-height:1.6}
+.bd{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
+.b{border:3px dashed var(--line);border-radius:14px;padding:10px;text-align:center;opacity:.55;font-size:15px}.b.got{opacity:1;border:3px solid var(--ink);background:var(--hi);color:#23245F}
+.b span{font-size:34px;display:block}
+.pop{position:fixed;left:50%;top:18%;transform:translateX(-50%);background:var(--hi);color:#23245F;border:3px solid var(--ink);border-radius:18px;padding:12px 20px;font-family:"Baloo 2",sans-serif;font-size:22px;z-index:9;animation:up 2.4s ease both;text-align:center}
+@keyframes up{0%{opacity:0;transform:translate(-50%,20px)}12%,80%{opacity:1;transform:translate(-50%,0)}100%{opacity:0}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head><body><div class="wrap">
+<header><h1><span class="mark">Word Power-Up</span> 💪</h1>
+<div class="stat"><span class="pill" id="lvl">Level 1</span><div class="xp" aria-hidden="true"><i id="xpb"></i></div><span class="pill" id="xpt">0 XP</span></div></header>
+<nav role="tablist" id="nav"></nav>
+
+<section class="sec on" id="s0">
+<div class="card"><h2>Swap boring words for power words!</h2><p class="sub">Tap a plain word to see how to make your sentence stronger.</p>
+<div class="chips" id="tf"></div><div class="grid" id="wg"></div></div>
+<div class="card" id="wd" hidden></div></section>
+
+<section class="sec" id="s1"><div class="card"><h2>Idioms: sayings with a secret meaning</h2><p class="sub">An idiom does not mean what the words say. Tap a card to flip it and find the secret meaning!</p></div><div class="igrid" id="ig"></div></section>
+
+<section class="sec" id="s2"><div class="card"><h2>Sentence Booster ✍️</h2><p class="sub">Type your own sentence. Pink words can be stronger. Tap one, then pick a power word!</p>
+<textarea id="inp" aria-label="Your sentence">The big dog walked slowly because he was tired.</textarea>
+<button class="go" id="bst">Boost it!</button><button class="go alt" id="smp">Try another sentence</button></div>
+<div class="card" id="oc" hidden><div class="flex"><div id="out" class="big"></div><button class="say" id="rd" aria-label="Read aloud">🔊</button></div><div class="chips" id="ch"></div><p class="sub" id="tip"></p></div></section>
+
+<section class="sec" id="s3"><div class="card" id="pl"></div></section>
+
+<section class="sec" id="s4"><div class="card"><h2>My badges 🏅</h2><p class="sub" id="bsub"></p><div class="bd" id="bd"></div></div>
+<div class="card info row"><div class="lab">Speak it, write it!</div><p style="margin:4px 0 0">Pick one new word and one idiom each day. Use them at lunch, in your journal and in class. A word you use three times is a word you own.</p></div></section>
+</div>
+<script>
+const W=[
+{b:"big",t:"a",s:"The big dog barked.",w:[["enormous","extremely large","The enormous dog barked so loudly that the windows shook."],["gigantic","bigger than anything around it","A gigantic dog stood at the gate."]]},
+{b:"tired",t:"a",s:"I was tired after the race.",w:[["exhausted","so tired you have no energy left","I was exhausted after the race and flopped onto the grass."],["drained","empty of energy","She felt drained after the long match."]]},
+{b:"scared",t:"a",s:"The boy was scared of the dark.",w:[["terrified","extremely frightened","The boy was terrified of the dark cellar."],["petrified","so scared you cannot move","He stood petrified as the door creaked."]]},
+{b:"happy",t:"a",s:"She was happy to win.",w:[["delighted","very pleased","She was delighted to win the trophy."],["overjoyed","filled with great happiness","The team was overjoyed when the bell rang."]]},
+{b:"sad",t:"a",s:"He felt sad when his friend left.",w:[["heartbroken","filled with deep sadness","He felt heartbroken when his best friend moved away."],["miserable","very unhappy","She looked miserable in the pouring rain."]]},
+{b:"angry",t:"a",s:"Dad was angry about the mess.",w:[["furious","extremely angry","Dad was furious about the muddy footprints."],["irritated","annoyed and bothered","The teacher felt irritated by the noise."]]},
+{b:"pretty",t:"a",s:"The garden was pretty.",w:[["stunning","so beautiful it amazes you","The garden was stunning in the morning sun."],["breathtaking","so beautiful you forget to breathe","We gazed at the breathtaking sunset."]]},
+{b:"cold",t:"a",s:"The water was cold.",w:[["freezing","extremely cold","The freezing water made me gasp."],["icy","very cold, like ice","An icy wind howled across the field."]]},
+{b:"hungry",t:"a",s:"We were hungry after school.",w:[["starving","very, very hungry","We were starving after the long school day."],["famished","extremely hungry","The famished campers rushed to dinner."]]},
+{b:"smart",t:"a",s:"The girl was smart.",w:[["brilliant","extremely clever","The brilliant girl solved the puzzle in a minute."],["resourceful","good at finding clever ways to solve problems","The resourceful boy fixed the tent with a stick."]]},
+{b:"walked",f:["walk","walks","walking"],t:"v",s:"He walked into the room.",w:[["tiptoed","walked quietly on your toes","He tiptoed into the room so he would not wake the baby."],["stomped","walked with heavy angry steps","He stomped into the room, red in the face."],["trudged","walked slowly and heavily","She trudged home through the deep snow."]]},
+{b:"said",f:["say","says","saying"],t:"v",s:"“Help!” she said.",w:[["whispered","spoke in a very soft voice","“Don’t move,” she whispered."],["shouted","spoke very loudly","“Help!” she shouted across the field."],["muttered","spoke quietly and unclearly","“Not fair,” he muttered."]]},
+{b:"ran",f:["run","runs","running"],t:"v",s:"The boy ran to the bus.",w:[["sprinted","ran as fast as you can","The boy sprinted to the bus."],["dashed","ran quickly for a short way","She dashed across the road."]]},
+{b:"looked",f:["look","looks","looking"],t:"v",s:"He looked at the stars.",w:[["gazed","looked for a long time with wonder","He gazed at the glittering stars."],["glanced","looked quickly","She glanced at the clock."],["peeked","looked secretly","He peeked through the curtain."]]},
+{b:"ate",f:["eat","eats","eating"],t:"v",s:"He ate his lunch.",w:[["devoured","ate quickly and hungrily","He devoured his lunch in two minutes."],["nibbled","took small bites","The mouse nibbled the cheese."]]},
+{b:"laughed",f:["laugh","laughs","laughing"],t:"v",s:"We laughed at the joke.",w:[["giggled","laughed in a high, silly way","We giggled at the silly joke."],["roared","laughed very loudly","The class roared with laughter."]]},
+{b:"jumped",f:["jump","jumps","jumping"],t:"v",s:"The cat jumped onto the shelf.",w:[["leaped","jumped high or far","The cat leaped onto the shelf."],["pounced","jumped suddenly to catch something","The kitten pounced on the ball."]]}];
+const I=[
+["a piece of cake","something very easy","🍰","The maths test was very easy.","The maths test was a piece of cake."],
+["under the weather","feeling a little ill","🌧️","Mina stayed home because she felt unwell.","Mina stayed home because she was under the weather."],
+["break the ice","start a friendly talk with new people","🧊","I said hello to the new girl to start a chat.","I told a joke to break the ice with the new girl."],
+["spill the beans","tell a secret by mistake","🫘","Rohan told us about the surprise party by mistake.","Rohan spilled the beans about the surprise party."],
+["hit the books","study hard","📚","I must study hard for tomorrow’s test.","I must hit the books for tomorrow’s test."],
+["once in a blue moon","very rarely","🌙","We eat out only very rarely.","We eat out once in a blue moon."],
+["cost an arm and a leg","be very expensive","💸","That new bicycle was very expensive.","That new bicycle cost an arm and a leg."],
+["let the cat out of the bag","reveal a secret","🐱","Tara told everyone our secret plan.","Tara let the cat out of the bag about our plan."],
+["bite off more than you can chew","try to do too much","🍔","Anu said yes to five clubs and now has no time.","Anu bit off more than she could chew with five clubs."],
+["raining cats and dogs","raining very heavily","⛈️","It was raining very heavily at lunchtime.","It was raining cats and dogs at lunchtime."],
+["over the moon","extremely happy","🚀","Dev was extremely happy with his result.","Dev was over the moon with his result."],
+["on thin ice","in a risky situation","⚠️","Ria was in a risky situation after missing homework again.","Ria was on thin ice after missing homework again."],
+["the ball is in your court","it is your turn to decide","🎾","I have asked my question. It is your turn to decide.","I have shared my idea, so the ball is in your court."],
+["a blessing in disguise","something good that seemed bad at first","🎁","Missing the bus felt bad but led to a great walk.","Missing the bus was a blessing in disguise."]];
+const BG=[["wiz","🧙","Word Wizard","See 10 power words"],["exp","🧭","Idiom Explorer","Flip 8 idiom cards"],["smi","🔨","Sentence Smith","Upgrade 5 words"],["qui","🏆","Quiz Champ","Get a perfect round"],["str","🔥","XP Hero","Earn 150 XP"]];
+let S={xp:0,w:[],i:[],u:0,b:[]};
+try{const x=JSON.parse(localStorage.getItem("wpu")||"null");if(x)S=Object.assign(S,x)}catch(e){}
+const $=id=>document.getElementById(id),el=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.textContent=h;return e};
+function save(){try{localStorage.setItem("wpu",JSON.stringify(S))}catch(e){}}
+function pop(m){const p=el("div","pop",m);document.body.appendChild(p);setTimeout(()=>p.remove(),2400)}
+function award(k){if(S.b.includes(k))return;S.b.push(k);const g=BG.find(x=>x[0]==k);pop(g[1]+" Badge: "+g[2]+"!")}
+function add(n){S.xp+=n;if(S.xp>=150)award("str");ui();save()}
+function ui(){const l=Math.floor(S.xp/50)+1;$("lvl").textContent="Level "+l;$("xpt").textContent=S.xp+" XP";$("xpb").style.width=(S.xp%50)*2+"%";bdg()}
+function say(t){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.rate=.9;speechSynthesis.speak(u)}catch(e){}}
+function sb(t){const b=el("button","say","🔊");b.setAttribute("aria-label","Read aloud");b.onclick=e=>{e.stopPropagation();say(t)};return b}
+function shuf(a){return a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1])}
+// nav
+const T=["🚀 Power Words","🗣️ Idioms","✍️ Booster","🎮 Play","🏅 Badges"];
+T.forEach((t,i)=>{const b=el("button","",t);b.setAttribute("role","tab");b.setAttribute("aria-selected",i==0);b.onclick=()=>{[...$("nav").children].forEach((c,j)=>c.setAttribute("aria-selected",j==i));document.querySelectorAll(".sec").forEach((s,j)=>s.classList.toggle("on",j==i));if(i==3)menu();if(i==4)bdg()};$("nav").appendChild(b)});
+// words
+let tf="a";
+[["a","Describing words (adjectives)"],["v","Strong verbs"]].forEach(([k,n])=>{const c=el("button","chip"+(k==tf?" sel":""),n);c.onclick=()=>{tf=k;[...$("tf").children].forEach(x=>x.classList.remove("sel"));c.classList.add("sel");grid();$("wd").hidden=true};$("tf").appendChild(c)});
+function grid(){const g=$("wg");g.innerHTML="";W.filter(x=>x.t==tf).forEach(x=>{const b=el("button","bw"+(S.w.includes(x.b)?" seen":""),x.b);b.appendChild(el("small","",x.w.length+" power words"));b.onclick=()=>show(x);g.appendChild(b)})}
+function show(x){if(!S.w.includes(x.b)){S.w.push(x.b);add(5);if(S.w.length>=10)award("wiz");grid()}
+const d=$("wd");d.hidden=false;d.innerHTML="";
+d.appendChild(el("h2","","Instead of “"+x.b+"”…"));
+const bad=el("div","row bad");bad.appendChild(el("div","lab","Plain sentence"));const p=el("div","big");p.appendChild(el("span","old",x.s));bad.appendChild(p);d.appendChild(bad);
+x.w.forEach(w=>{const r=el("div","row good");const f=el("div","flex");f.appendChild(el("div","lab","Power word: "+w[0]));f.appendChild(sb(w[2]));r.appendChild(f);r.appendChild(el("div","","It means: "+w[1]));const s=el("div","big");const m=w[2].toLowerCase().indexOf(w[0]);if(m<0){s.appendChild(el("span","new",w[2]))}else{s.append(w[2].slice(0,m));s.appendChild(el("span","new",w[2].slice(m,m+w[0].length)));s.append(w[2].slice(m+w[0].length))}r.appendChild(s);d.appendChild(r)});
+d.appendChild(el("div","row info","Try it! Say one of these sentences aloud, then write your own with “"+x.w[0][0]+"”."));d.scrollIntoView({behavior:"smooth",block:"nearest"})}
+// idioms
+I.forEach((x,i)=>{const w=el("div","card flip");w.style.padding=0;w.style.border=0;const b=el("button");b.setAttribute("aria-label","Idiom: "+x[0]+". Tap to flip.");
+const f=el("div","face front");f.appendChild(el("div","",x[2]));f.appendChild(el("b","","“"+x[0]+"”"));f.appendChild(el("div","sub","Tap to find the meaning"));
+const k=el("div","face back");k.appendChild(el("div","lab","Meaning: "+x[1]));
+const r1=el("div","row bad");r1.appendChild(el("span","old",x[3]));const r2=el("div","row good");const m=x[4].toLowerCase().indexOf(x[0]);r2.append(x[4].slice(0,m));r2.appendChild(el("span","new",x[4].slice(m,m+x[0].length)));r2.append(x[4].slice(m+x[0].length));
+k.append(r1,r2);b.append(f,k);w.appendChild(b);
+b.onclick=()=>{w.classList.toggle("f");if(w.classList.contains("f")&&!S.i.includes(i)){S.i.push(i);add(5);if(S.i.length>=8)award("exp")}};$("ig").appendChild(w)});
+// booster
+const MAP={};W.forEach(x=>{MAP[x.b]=x;(x.f||[]).forEach(f=>MAP[f]=x)});
+const SAMPLES=["The big dog walked slowly because he was tired.","She said the pretty garden was cold and I looked at it.","We ate lunch and laughed because we were hungry.","He ran home and was scared of the dark."];
+let tk=[],sel=-1,si=0;
+function draw(){const o=$("out");o.innerHTML="";let n=0;tk.forEach((t,i)=>{if(MAP[t.toLowerCase()]){n++;const b=el("button","tok",t);b.onclick=()=>{sel=i;draw();opts()};o.appendChild(b)}else o.append(t)});$("tip").textContent=n?"Tap a pink word for power-word choices.":"Great job! No plain words left. Now add an idiom: “It was a piece of cake!”"}
+function opts(){const c=$("ch");c.innerHTML="";if(sel<0)return;const x=MAP[tk[sel].toLowerCase()];c.appendChild(el("div","lab","Pick a stronger word: "));x.w.forEach(w=>{const b=el("button","chip",w[0]+" ("+w[1]+")");b.onclick=()=>{let v=w[0];if(/^[A-Z]/.test(tk[sel]))v=v[0].toUpperCase()+v.slice(1);if(x.t=="a"||/ed$/.test(tk[sel])||tk[sel].toLowerCase()==x.b){tk[sel]=v}else{tk[sel]=v}sel=-1;S.u++;add(3);if(S.u>=5)award("smi");draw();opts()};c.appendChild(b)})}
+$("bst").onclick=()=>{const v=$("inp").value.trim();if(!v){pop("Type a sentence first! ✍️");return}tk=v.split(/([A-Za-z’']+)/);sel=-1;$("oc").hidden=false;draw();opts()};
+$("smp").onclick=()=>{si=(si+1)%SAMPLES.length;$("inp").value=SAMPLES[si];$("bst").click()};
+$("rd").onclick=()=>say(tk.join(""));
+// play
+let Q=[],qi=0,sc=0;
+function mk(kind){const q=[];if(kind=="w"||kind=="m"){shuf(W).slice(0,6).forEach(x=>{const w=shuf(x.w)[0];const o=shuf([w[0],x.b,shuf(W.filter(y=>y.t==x.t&&y!=x))[0].w[0][0]]);const m=w[2].toLowerCase().indexOf(w[0]);q.push({p:"Clue: “"+w[1]+"”",s:w[2].slice(0,m)+"_____"+w[2].slice(m+w[0].length),o,a:w[0],e:"“"+w[0]+"” is a power word. It means "+w[1]+"."})})}
+if(kind=="i"||kind=="m"){shuf(I).slice(0,6).forEach((x,j)=>{if(kind=="m"&&j%2)return;const d=shuf(I.filter(y=>y!=x)).slice(0,2);q.push({p:"What does this idiom mean?",s:"“"+x[0]+"”",o:shuf([x[1],d[0][1],d[1][1]]),a:x[1],e:"“"+x[0]+"” means "+x[1]+"."})})}
+if(kind=="f"||kind=="m"){shuf(I).slice(0,kind=="m"?3:6).forEach(x=>{const d=shuf(I.filter(y=>y!=x)).slice(0,2);const m=x[4].toLowerCase().indexOf(x[0]);q.push({p:"Which idiom fits best?",s:x[4].slice(0,m)+"_____"+x[4].slice(m+x[0].length),o:shuf([x[0],d[0][0],d[1][0]]),a:x[0],e:"Yes! “"+x[0]+"” means "+x[1]+"."})})}
+return shuf(q)}
+function menu(){const p=$("pl");p.innerHTML="";p.appendChild(el("h2","","Pick a game 🎮"));p.appendChild(el("p","sub","Each right answer gives you 10 XP. Get every answer right for a badge!"));
+[["w","💥 Power Word Match","Choose the word that fits the clue"],["i","🗣️ Idiom Meaning","What does the saying really mean?"],["f","🧩 Idiom Fill-in","Choose the idiom that fits the sentence"],["m","🌈 Mix It Up","A bit of everything"]].forEach(g=>{const b=el("button","opt",g[1]+" – "+g[2]);b.onclick=()=>{Q=mk(g[0]);qi=0;sc=0;ask()};p.appendChild(b)})}
+function ask(){const p=$("pl");p.innerHTML="";if(qi>=Q.length){const st="⭐".repeat(Math.max(1,Math.round(sc/Q.length*3)));p.appendChild(el("h2","","Round complete! "+st));p.appendChild(el("p","big","You got "+sc+" out of "+Q.length+"."));if(sc==Q.length){award("qui");add(15)}const b=el("button","go","Play again");b.onclick=menu;p.appendChild(b);return}
+const q=Q[qi];p.appendChild(el("div","sub","Question "+(qi+1)+" of "+Q.length));p.appendChild(el("h3","",q.p));p.appendChild(el("div","big",q.s));let done=false;const fb=el("div");
+q.o.forEach(o=>{const b=el("button","opt",o);b.onclick=()=>{if(done)return;done=true;const ok=o==q.a;if(ok){sc++;add(10);b.classList.add("ok")}else{b.classList.add("no");[...p.querySelectorAll(".opt")].find(x=>x.textContent==q.a).classList.add("ok")}
+fb.className="row "+(ok?"good":"bad");fb.textContent=(ok?"Correct! ":"Not quite. ")+q.e;const n=el("button","go",qi+1<Q.length?"Next question":"See my score");n.onclick=()=>{qi++;ask()};p.append(fb,n)};p.appendChild(b)});p.appendChild(fb)}
+// badges
+function bdg(){const d=$("bd");d.innerHTML="";BG.forEach(g=>{const b=el("div","b"+(S.b.includes(g[0])?" got":""));b.appendChild(el("span","",S.b.includes(g[0])?g[1]:"🔒"));b.appendChild(el("div","lab",g[2]));b.appendChild(el("div","",g[3]));d.appendChild(b)});$("bsub").textContent="You have "+S.b.length+" of "+BG.length+" badges. Keep going!"}
+grid();ui();$("bst").click();
+</script></body></html>
